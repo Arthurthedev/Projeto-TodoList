@@ -39,3 +39,17 @@ Este projeto foi construído como exercício prático para fixar conceitos funda
 - Organização de estilos com Tailwind.
 
 - Arquitetura limpa em um projeto front-end.
+
+# 🚀 Como Rodar o Projeto
+1️⃣ Clonar o repositório
+git clone https://github.com/seu-usuario/Projeto-TodoList.git
+
+2️⃣ Instalar dependências
+npm install
+
+3️⃣ Rodar o projeto em modo desenvolvimento
+npm run dev
+
+4️⃣ Abrir no navegador
+
+Acesse o endereço que aparecer no terminal (geralmente http://localhost:5173)
