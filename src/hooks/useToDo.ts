@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 
 export interface Todo {
   id: number;
@@ -6,11 +6,30 @@ export interface Todo {
   completed: boolean;
 }
 
-
+type BackendTodo = {
+  id: number;
+  title: string;
+  done: boolean;
+};
 export const useTodo = () => {
 
     const [todolist, setTodoList] = useState<Todo[]>([]);
     const [filter, setFilter] = useState<"all" | "active" | "completed">("all")
+
+    useEffect(() => {
+  fetch("http://localhost:3000/todos")
+    .then(res => res.json())
+    .then(data => {
+      const formatted = data.map((todo: BackendTodo) => ({
+    id: todo.id,
+    text: todo.title,
+    completed: todo.done,
+  }));
+
+  setTodoList(formatted);
+    })
+    .catch(err => console.log(err));
+}, []);
 
     const addTodo = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
