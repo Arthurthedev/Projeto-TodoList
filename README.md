@@ -1,55 +1,137 @@
-# 📝 To-Do List com React, TypeScript, Tailwind e Context API
+# 📝 To-Do List Fullstack (React + API própria)
+
 <img src="public/images/exemplo-ToDoList.gif" alt="exemplo de todolist">
 
-## Este projeto é uma lista de tarefas (to-do list) desenvolvida para treinar conceitos de React moderno e boas práticas com TypeScript.
-- O foco é praticar componentização, gerenciamento de estado com hooks, alternância de temas (dark/light) e estilização com Tailwind CSS.
+## 📌 Sobre o Projeto
 
-## 🚀 Tecnologias usadas
+Este projeto é uma **lista de tarefas (To-Do List)** desenvolvida para praticar conceitos modernos de **React com TypeScript**, agora evoluído para um **projeto fullstack**, consumindo uma API própria.
 
-React + TypeScript → construção dos componentes e tipagem estática.
+O frontend foi integrado a uma API desenvolvida separadamente, permitindo persistência real dos dados em banco.
 
-Context API → gerenciamento global do tema (dark/light).
+---
 
-Custom Hook (useToDo) → centraliza a lógica da lista de tarefas (criar, completar, filtrar).
+## Tecnologias utilizadas
 
-Tailwind CSS → estilização rápida e responsiva.
+### 🖥️ Frontend
 
-Vite → bundler rápido para desenvolvimento.
+* React + TypeScript → construção dos componentes e tipagem estática
+* Context API → gerenciamento global do tema (dark/light)
+* Custom Hook (`useTodo`) → centraliza a lógica da aplicação e integração com API
+* Tailwind CSS → estilização rápida e responsiva
+* Vite → bundler para desenvolvimento
+
+### 🔧 Backend (API própria)
+
+* Node.js + Express
+* Prisma ORM
+* PostgreSQL
+
+📌 Repositório da API:
+👉 https://github.com/seu-usuario/Quest-todo-s-api
+
+---
 
 ## ⚙️ Funcionalidades
 
-- Adicionar novas tarefas.
+* ➕ Adicionar novas tarefas (persistidas no banco)
+* ✅ Marcar e desmarcar tarefas como concluídas
+* ❌ Deletar tarefas individualmente
+* 🧹 Remover todas as tarefas concluídas
+* 🔍 Filtrar por:
 
-- Marcar e desmarcar tarefas como concluídas.
+  * Todas
+  * Ativas
+  * Concluídas
+* 🌙 Alternar entre tema claro e escuro
 
-- Filtrar tarefas por todas / ativas / concluídas.
+---
 
-- Remover todas as concluídas com um clique.
+## 🧠 Arquitetura
 
-- Alternar entre tema claro e escuro (ThemeContext + Tailwind).
+O projeto segue uma arquitetura simples de aplicação fullstack:
+
+Frontend (React)
+↓
+Fetch API
+↓
+Backend (Node + Express)
+↓
+Prisma
+↓
+Banco de Dados (PostgreSQL)
+
+---
 
 ## 🎯 Objetivo
 
-Este projeto foi construído como exercício prático para fixar conceitos fundamentais de React e TypeScript:
+Este projeto foi construído para consolidar conceitos importantes como:
 
-- Estados locais e globais.
+* Integração entre frontend e backend
+* Consumo de APIs REST
+* CRUD completo (Create, Read, Update, Delete)
+* Organização de código com hooks e componentes
+* Boas práticas com TypeScript
 
-- Reuso de lógica com hooks.
+---
 
-- Organização de estilos com Tailwind.
+# 🔧  Como rodar o projeto
 
-- Arquitetura limpa em um projeto front-end.
+## 🔧 1. Clonar o repositório do frontend
 
-# 🚀 Como Rodar o Projeto
-1️⃣ Clonar o repositório
-git clone https://github.com/seu-usuario/Projeto-TodoList.git
+```bash
+git clone https://github.com/Arthurthedev/Projeto-TodoList
+```
 
-2️⃣ Instalar dependências
+---
+
+## 🔧 2. Clonar e rodar a API (OBRIGATÓRIO)
+
+```bash
+git clone https://github.com/Arthurthedev/Quest-Todo-s-API
+cd Quest-todo-s-api
 npm install
-
-3️⃣ Rodar o projeto em modo desenvolvimento
 npm run dev
+```
 
-4️⃣ Abrir no navegador
+👉 A API deve estar rodando em:
 
-Acesse o endereço que aparecer no terminal (geralmente http://localhost:5173)
+```
+http://localhost:3000
+```
+
+---
+
+## 🔧 3. Rodar o frontend
+
+```bash
+npm install
+npm run dev
+```
+
+---
+
+## 🌐 4. Acessar no navegador
+
+```
+http://localhost:5173
+```
+
+---
+
+## ⚠️ Observação importante
+
+O frontend depende da API para funcionar corretamente.
+Sem a API rodando, não será possível:
+
+* Criar tarefas
+* Deletar tarefas
+* Atualizar status
+
+---
+
+##  Status do Projeto
+
+✅ CRUD completo funcionando
+✅ Integração frontend + backend
+✅ Persistência em banco de dados
+
