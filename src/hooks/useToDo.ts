@@ -11,79 +11,137 @@ type BackendTodo = {
   title: string;
   done: boolean;
 };
+
 export const useTodo = () => {
+  const [todolist, setTodoList] = useState<Todo[]>([]);
+  const [filter, setFilter] = useState<"all" | "active" | "completed">("all");
 
-    const [todolist, setTodoList] = useState<Todo[]>([]);
-    const [filter, setFilter] = useState<"all" | "active" | "completed">("all")
+  useEffect(() => {
+    fetch("http://localhost:3000/todos")
+      .then((res) => res.json())
+      .then((data: BackendTodo[]) => {
+        const formatted = data.map((todo) => ({
+          id: todo.id,
+          text: todo.title,
+          completed: todo.done,
+        }));
 
-    useEffect(() => {
-  fetch("http://localhost:3000/todos")
-    .then(res => res.json())
-    .then(data => {
-      const formatted = data.map((todo: BackendTodo) => ({
-    id: todo.id,
-    text: todo.title,
-    completed: todo.done,
-  }));
+        setTodoList(formatted);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
-  setTodoList(formatted);
-    })
-    .catch(err => console.log(err));
-}, []);
+  const addTodo = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-    const addTodo = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const todoItem = formData.get("todo") as string;
 
-        const formData = new FormData(event.currentTarget);
-        const todoItem = formData.get("todo") as string
+    if (!todoItem.trim()) return;
 
+    try {
+      const response = await fetch("http://localhost:3000/todos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: todoItem.trim(),
+        }),
+      });
 
-        console.log(todoItem);
+      if (!response.ok) {
+        console.log("Erro ao criar tarefa");
+        return;
+      }
 
-        if (!todoItem.trim()) return
+      const newTodo: BackendTodo = await response.json();
 
-        setTodoList(prev => [...prev, {
-            id: Date.now(),
-            text: todoItem,
-            completed: false
-        }])
+      setTodoList((prev) => [
+        ...prev,
+        {
+          id: newTodo.id,
+          text: newTodo.title,
+          completed: newTodo.done,
+        },
+      ]);
 
-        event.currentTarget.reset()
-        setFilter("all")
+      event.currentTarget.reset();
+      setFilter("all");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteTodo = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:3000/todos/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        console.log("Erro ao deletar");
+        return;
+      }
+
+      setTodoList((prev) => prev.filter((todo) => todo.id !== id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const toggleTodoCompleted = async (id: number) => {
+  const todo = todolist.find(t => t.id === id);
+  if (!todo) return;
+
+  try {
+    const response = await fetch(`http://localhost:3000/todos/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        done: !todo.completed,
+      }),
+    });
+
+    if (!response.ok) {
+      console.log("Erro ao atualizar");
+      return;
     }
 
-    const toggleTodoCompleted = (id: number) => {
-        const newTodoList = todolist.map(todo => {
-            if (id === todo.id) {
-                const completed = !todo.completed
-                return {
-                    ...todo,
-                    completed
+    const updated = await response.json();
 
-                }
-            }
+    setTodoList(prev =>
+      prev.map(t =>
+        t.id === id
+          ? { ...t, completed: updated.done }
+          : t
+      )
+    );
 
-            return todo
-        })
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-        setTodoList(newTodoList)
-    }
+  const filteredTodos = todolist.filter((todo) => {
+    if (filter === "active") return !todo.completed;
+    if (filter === "completed") return todo.completed;
+    return true;
+  });
 
-    const filteredTodos = todolist.filter(todo => {
-        if (filter === "active") return !todo.completed
-        if (filter === "completed") return todo.completed
-        return true
-    })
+  const clearCompleted = () => {
+    setTodoList((prev) => prev.filter((todo) => !todo.completed));
+  };
 
-    const clearCompleted = () => {
-        setTodoList(prev => prev.filter(todo => !todo.completed))
-    }
-    return {
-        addTodo,
-        toggleTodoCompleted,
-        filteredTodos,
-        clearCompleted,
-        setFilter,
-        filter
-    }
-}
+  return {
+    addTodo,
+    toggleTodoCompleted,
+    filteredTodos,
+    clearCompleted,
+    setFilter,
+    filter,
+    deleteTodo,
+  };
+};
